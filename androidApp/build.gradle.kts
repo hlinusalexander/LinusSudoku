@@ -24,4 +24,8 @@ dependencies {
     implementation("com.google.android.material:material:1.4.0")
     implementation("androidx.appcompat:appcompat:1.3.1")
     implementation("androidx.constraintlayout:constraintlayout:2.1.0")
+    implementation("androidx.gridlayout:gridlayout:1.0.0")
+
+    implementation("android.arch.lifecycle:extensions:1.1.1")
+    implementation("android.arch.lifecycle:viewmodel:1.1.1")
 }
