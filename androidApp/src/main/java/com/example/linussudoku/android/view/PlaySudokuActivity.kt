@@ -16,13 +16,17 @@ fun greet(): String {
 
 class PlaySudokuActivity : AppCompatActivity(), SudokuBoardView.OnTouchListener {
     private lateinit var viewModel: PlaySudokuViewModel
-    private val binding = ActivityMainBinding.inflate(layoutInflater)
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
+
+        println("Hellos")
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        
+
+        val binding = ActivityMainBinding.inflate(layoutInflater)
+
+
         binding.sudokuBoardView.registerListener(this)
         setContentView(binding.root)
 
@@ -34,6 +38,8 @@ class PlaySudokuActivity : AppCompatActivity(), SudokuBoardView.OnTouchListener 
     }
 
     private fun updateSelectedCellUI(cell: Pair<Int, Int>?) = cell?.let {
+        val binding = ActivityMainBinding.inflate(layoutInflater)
+
         binding.sudokuBoardView.updateSelectedCellUI(cell.first, cell.second)
     }
 
