@@ -8,6 +8,7 @@ import com.example.linussudoku.Greeting
 import com.example.linussudoku.android.R
 import com.example.linussudoku.android.databinding.ActivityMainBinding
 import com.example.linussudoku.android.view.custom.SudokuBoardView
+import com.example.linussudoku.android.view.game.Cell
 import com.example.linussudoku.android.view.viewmodel.PlaySudokuViewModel
 
 fun greet(): String {
@@ -33,6 +34,9 @@ class PlaySudokuActivity : AppCompatActivity(), SudokuBoardView.OnTouchListener 
         println("The current registered listener is: ${binding.sudokuBoardView.listener.toString()}")
 
         //What does the line below do?
+        // This? https://developer.android.com/reference/androidx/appcompat/app/AppCompatActivity
+        // Simply, this seems to enable newer features on older devices, "compat"="compatibility".
+        // Since we use this method we have to extend "AppCompatActivity()", which we do above.
         setContentView(binding.root)
 
         println("This is my current state: ${this.lifecycle.currentState}")
@@ -40,7 +44,11 @@ class PlaySudokuActivity : AppCompatActivity(), SudokuBoardView.OnTouchListener 
         viewModel.sudokuGame.selectedCellLiveData.observe(
             this,
             Observer { updateSelectedCellUI(it) })
+        viewModel.sudokuGame.cellsLiveData.observe(this, { updateCells(it) })
+    }
 
+    private fun updateCells(cells: List<Cell>) = cells?.let {
+        binding.sudokuBoardView.updateCells(cells)
     }
 
     private fun updateSelectedCellUI(cell: Pair<Int, Int>?) = cell?.let {
