@@ -60,3 +60,6 @@ android {
         targetSdk = 32
     }
 }
+dependencies {
+    implementation("androidx.lifecycle:lifecycle-livedata-core-ktx:2.4.0")
+}
