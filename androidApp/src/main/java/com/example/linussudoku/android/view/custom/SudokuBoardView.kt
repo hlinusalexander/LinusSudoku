@@ -20,7 +20,7 @@ class SudokuBoardView(context: Context, attributeSet: AttributeSet) : View(conte
     private var selectedRow = 0
     private var selectedColumn = 0
 
-    private var listener: SudokuBoardView.OnTouchListener? = null
+    var listener: OnTouchListener? = null
 
     private val thickLinePaint = Paint().apply {
         style = Paint.Style.STROKE
@@ -147,7 +147,7 @@ class SudokuBoardView(context: Context, attributeSet: AttributeSet) : View(conte
         invalidate()
     }
 
-    fun registerListener(listener: SudokuBoardView.OnTouchListener) {
+    fun registerListener(listener: OnTouchListener) {
         this.listener = listener
     }
 

@@ -17,6 +17,7 @@ fun greet(): String {
 class PlaySudokuActivity : AppCompatActivity(), SudokuBoardView.OnTouchListener {
     private lateinit var viewModel: PlaySudokuViewModel
 
+    private lateinit var binding: ActivityMainBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
 
@@ -24,13 +25,18 @@ class PlaySudokuActivity : AppCompatActivity(), SudokuBoardView.OnTouchListener 
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        val binding = ActivityMainBinding.inflate(layoutInflater)
+        binding = ActivityMainBinding.inflate(layoutInflater)
 
 
         binding.sudokuBoardView.registerListener(this)
+
+        println("The current registered listener is: ${binding.sudokuBoardView.listener.toString()}")
+
+        //What does the line below do?
         setContentView(binding.root)
 
-        viewModel = ViewModelProvider(this).get(PlaySudokuViewModel::class.java)
+        println("This is my current state: ${this.lifecycle.currentState}")
+        viewModel = ViewModelProvider(this)[PlaySudokuViewModel::class.java]
         viewModel.sudokuGame.selectedCellLiveData.observe(
             this,
             Observer { updateSelectedCellUI(it) })
@@ -38,8 +44,6 @@ class PlaySudokuActivity : AppCompatActivity(), SudokuBoardView.OnTouchListener 
     }
 
     private fun updateSelectedCellUI(cell: Pair<Int, Int>?) = cell?.let {
-        val binding = ActivityMainBinding.inflate(layoutInflater)
-
         binding.sudokuBoardView.updateSelectedCellUI(cell.first, cell.second)
     }
 
