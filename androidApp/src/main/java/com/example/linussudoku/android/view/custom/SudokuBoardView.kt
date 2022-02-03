@@ -1,10 +1,8 @@
 package com.example.linussudoku.android.view.custom
 
+import android.annotation.SuppressLint
 import android.content.Context
-import android.graphics.Canvas
-import android.graphics.Color
-import android.graphics.Paint
-import android.graphics.Rect
+import android.graphics.*
 import android.util.AttributeSet
 import android.view.MotionEvent
 import android.view.View
@@ -57,14 +55,24 @@ class SudokuBoardView(context: Context, attributeSet: AttributeSet) : View(conte
     private val textPaint = Paint().apply {
         style = Paint.Style.FILL_AND_STROKE
         color = Color.BLACK
-        textSize = 24F
-
+        textSize = 30F
     }
 
+    private val startingCellTextPaint = Paint().apply {
+        style = Paint.Style.FILL_AND_STROKE
+        color = Color.BLACK
+        textSize = 40F
+        typeface = Typeface.DEFAULT_BOLD
+    }
+
+    private val startingCellPaint = Paint().apply {
+        style = Paint.Style.FILL_AND_STROKE
+        color = Color.parseColor("#acacac")
+    }
 
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec)
-        val sizePixels = widthMeasureSpec.coerceAtMost(heightMeasureSpec)
+        val sizePixels = kotlin.math.min(widthMeasureSpec, heightMeasureSpec)
         setMeasuredDimension(sizePixels, sizePixels)
     }
 
@@ -77,11 +85,14 @@ class SudokuBoardView(context: Context, attributeSet: AttributeSet) : View(conte
 
     private fun fillCells(canvas: Canvas) {
 
+
         cells?.forEach {
             val row = it.row
             val column = it.column
 
-            if (row == selectedRow && column == selectedColumn) {
+            if (it.isStartingCell) {
+                fillCell(canvas, row, column, startingCellPaint)
+            } else if (row == selectedRow && column == selectedColumn) {
                 fillCell(canvas, row, column, selectedCellPaint)
             } else if (row == selectedRow || column == selectedColumn) {
                 fillCell(canvas, row, column, conflictingCellPaint)
@@ -140,19 +151,22 @@ class SudokuBoardView(context: Context, attributeSet: AttributeSet) : View(conte
             val column = it.column
             val valueString = it.value.toString()
             val textBounds = Rect()
-            textPaint.getTextBounds(valueString, 0, valueString.length, textBounds)
-            val textWidth = textPaint.measureText(valueString)
+            val paintToUse = if (it.isStartingCell) startingCellTextPaint else textPaint
+
+            paintToUse.getTextBounds(valueString, 0, valueString.length, textBounds)
+            val textWidth = paintToUse.measureText(valueString)
             val textHeight = textBounds.height()
 
             canvas.drawText(
                 valueString,
                 (column * cellSizePixels) + cellSizePixels / 2 - textWidth / 2,
                 (row * cellSizePixels) + cellSizePixels / 2 - textHeight / 2,
-                textPaint
+                paintToUse
             )
         }
     }
 
+    @SuppressLint("ClickableViewAccessibility")
     override fun onTouchEvent(event: MotionEvent): Boolean {
         return when (event.action) {
             MotionEvent.ACTION_DOWN -> {
