@@ -1,6 +1,7 @@
 package com.example.linussudoku.android.view
 
 import android.os.Bundle
+import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -17,6 +18,7 @@ fun greet(): String {
 
 class PlaySudokuActivity : AppCompatActivity(), SudokuBoardView.OnTouchListener {
     private lateinit var viewModel: PlaySudokuViewModel
+
 
     private lateinit var binding: ActivityMainBinding
 
@@ -45,6 +47,26 @@ class PlaySudokuActivity : AppCompatActivity(), SudokuBoardView.OnTouchListener 
             this,
             Observer { updateSelectedCellUI(it) })
         viewModel.sudokuGame.cellsLiveData.observe(this, { updateCells(it) })
+
+
+        val buttons: List<Button> = listOf(
+            binding.oneButton,
+            binding.twoButton,
+            binding.threeButton,
+            binding.fourButton,
+            binding.fiveButton,
+            binding.sixButton,
+            binding.sevenButton,
+            binding.eightButton,
+            binding.nineButton
+        )
+        
+        buttons.forEachIndexed { index, button ->
+            button.setOnClickListener {
+                viewModel.sudokuGame.handleInput(index + 1)
+            }
+        }
+
     }
 
     private fun updateCells(cells: List<Cell>) = cells?.let {
