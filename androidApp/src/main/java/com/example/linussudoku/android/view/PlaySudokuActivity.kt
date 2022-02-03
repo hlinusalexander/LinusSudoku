@@ -1,8 +1,10 @@
 package com.example.linussudoku.android.view
 
+import android.graphics.Color
 import android.os.Bundle
 import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.example.linussudoku.Greeting
@@ -18,15 +20,25 @@ fun greet(): String {
 
 class PlaySudokuActivity : AppCompatActivity(), SudokuBoardView.OnTouchListener {
     private lateinit var viewModel: PlaySudokuViewModel
-
+    private lateinit var numberButtons: List<Button>
 
     private lateinit var binding: ActivityMainBinding
+
+    //Set in onCreate()
+    private var primaryColor = -1
+    private var secondaryColor = -1
 
     override fun onCreate(savedInstanceState: Bundle?) {
 
         println("Hellos")
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
+        primaryColor = ContextCompat.getColor(
+            this,
+            R.color.colorPrimary
+        )
+        secondaryColor = Color.LTGRAY
 
         binding = ActivityMainBinding.inflate(layoutInflater)
 
@@ -47,9 +59,14 @@ class PlaySudokuActivity : AppCompatActivity(), SudokuBoardView.OnTouchListener 
             this,
             Observer { updateSelectedCellUI(it) })
         viewModel.sudokuGame.cellsLiveData.observe(this, { updateCells(it) })
+        viewModel.sudokuGame.isTakingNotesLiveData.observe(this, Observer {
+            updateNoteTakingUi(it)
+        })
+        viewModel.sudokuGame.highlightedKeysLiveData.observe(this, Observer {
+            updateHighLightedKeys(it)
+        })
 
-
-        val buttons: List<Button> = listOf(
+        numberButtons = listOf(
             binding.oneButton,
             binding.twoButton,
             binding.threeButton,
@@ -60,13 +77,16 @@ class PlaySudokuActivity : AppCompatActivity(), SudokuBoardView.OnTouchListener 
             binding.eightButton,
             binding.nineButton
         )
-        
-        buttons.forEachIndexed { index, button ->
+
+        numberButtons.forEachIndexed { index, button ->
             button.setOnClickListener {
                 viewModel.sudokuGame.handleInput(index + 1)
             }
         }
 
+        binding.notesButton.setOnClickListener {
+            viewModel.sudokuGame.changeNoteTakingState()
+        }
     }
 
     private fun updateCells(cells: List<Cell>) = cells?.let {
@@ -75,6 +95,23 @@ class PlaySudokuActivity : AppCompatActivity(), SudokuBoardView.OnTouchListener 
 
     private fun updateSelectedCellUI(cell: Pair<Int, Int>?) = cell?.let {
         binding.sudokuBoardView.updateSelectedCellUI(cell.first, cell.second)
+    }
+
+    private fun updateNoteTakingUi(isNoteTaking: Boolean?) = isNoteTaking?.let {
+        if (it) {
+            binding.notesButton.setBackgroundColor(
+                primaryColor
+            )
+        } else {
+            binding.notesButton.setBackgroundColor(secondaryColor)
+        }
+    }
+
+    private fun updateHighLightedKeys(set: Set<Int>?) = set?.let {
+        numberButtons.forEachIndexed { index, button ->
+            val color = if (set.contains(index + 1)) primaryColor else secondaryColor
+            button.setBackgroundColor(color)
+        }
     }
 
     override fun onCellTouched(row: Int, column: Int) {
