@@ -92,6 +92,17 @@ class PlaySudokuActivity : AppCompatActivity(), SudokuBoardView.OnTouchListener 
         binding.deleteButton.setOnClickListener {
             viewModel.sudokuGame.delete()
         }
+
+        /*
+         This method changes the background color ever so slightly compared to the default
+         value as a result we call the method at the start so that we use the changed value
+         as the default value.
+         */
+        updateHighLightedKeys(setOf())
+
+        val deleteDrawable = DrawableCompat.wrap(binding.deleteButton.background)
+        deleteDrawable.setTint(secondaryColor)
+        binding.deleteButton.background = deleteDrawable
     }
 
     private fun updateCells(cells: List<Cell>) = cells?.let {
