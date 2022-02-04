@@ -32,10 +32,11 @@ class SudokuGame {
     }
 
     fun handleInput(number: Int) {
-        val cell = board.getCell(selectedRow, selectedColumn)
         if (selectedRow == -1 || selectedColumn == -1) {
             return
         }
+        val cell = board.getCell(selectedRow, selectedColumn)
+
         if (isTakingNotes) {
             if (cell.notes.contains(number)) {
                 cell.notes.remove(number)
@@ -79,6 +80,9 @@ class SudokuGame {
     }
 
     fun delete() {
+        if (selectedRow == -1 || selectedColumn == -1) {
+            return
+        }
         val cell = board.getCell(selectedRow, selectedColumn)
         if (isTakingNotes) {
             cell.notes.clear()
