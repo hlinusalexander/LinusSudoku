@@ -13,14 +13,14 @@ class SudokuGame {
     private var selectedColumn = -1
     private var isTakingNotes = false
 
-    private val board: Board
+    val board: Board
 
     private val boardSize = 9
     private val squareRootSize = 3
 
     init {
         val cells = getValidStartingInstance()
-        
+
         board = Board(9, cells)
 
         selectedCellLiveData.postValue(Pair(selectedRow, selectedColumn))
@@ -88,6 +88,10 @@ class SudokuGame {
             cell.value = 0
         }
         cellsLiveData.postValue(board.cells)
+    }
+
+    fun solveBoard() {
+
     }
 
     fun newRandomBoard() {

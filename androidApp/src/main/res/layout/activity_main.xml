@@ -19,7 +19,7 @@
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
         android:columnCount="3"
-        android:rowCount="4">
+        android:rowCount="5">
 
         <Button
             android:id="@+id/oneButton"
@@ -104,8 +104,6 @@
 
         <Button
             android:id="@+id/newRandomBoardButton"
-            android:layout_width="87dp"
-            android:layout_height="42dp"
             android:layout_row="3"
             android:layout_column="1"
             android:text="New" />
@@ -117,6 +115,12 @@
             android:layout_row="3"
             android:layout_column="2"
             android:background="@drawable/delete_black" />
+
+        <Button
+            android:id="@+id/solveButton"
+            android:layout_row="4"
+            android:layout_column="1"
+            android:text="Solve" />
 
 
     </GridLayout>
