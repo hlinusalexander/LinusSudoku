@@ -32,7 +32,6 @@ class PlaySudokuActivity : AppCompatActivity(), SudokuBoardView.OnTouchListener 
 
     override fun onCreate(savedInstanceState: Bundle?) {
 
-        println("Hellos")
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
@@ -64,6 +63,9 @@ class PlaySudokuActivity : AppCompatActivity(), SudokuBoardView.OnTouchListener 
         viewModel.sudokuGame.highlightedKeysLiveData.observe(this, Observer {
             updateHighLightedKeys(it)
         })
+        viewModel.sudokuGame.showNewBoardDialogLiveData.observe(this) {
+            showNewBoardDialog(it)
+        }
 
 
         numberButtons = listOf(
@@ -92,8 +94,8 @@ class PlaySudokuActivity : AppCompatActivity(), SudokuBoardView.OnTouchListener 
             viewModel.sudokuGame.delete()
         }
 
-        binding.newRandomBoardButton.setOnClickListener {
-            viewModel.sudokuGame.newRandomBoard()
+        binding.newBoardButton.setOnClickListener {
+            viewModel.sudokuGame.newBoard()
         }
 
         binding.solveButton.setOnClickListener {
@@ -110,6 +112,15 @@ class PlaySudokuActivity : AppCompatActivity(), SudokuBoardView.OnTouchListener 
         val deleteDrawable = DrawableCompat.wrap(binding.deleteButton.background)
         deleteDrawable.setTint(secondaryColor)
         binding.deleteButton.background = deleteDrawable
+    }
+
+    private fun showNewBoardDialog(show: Boolean) {
+        if (show) {
+            val newBoardDialog = NewBoardDialog()
+            newBoardDialog.show(supportFragmentManager, "asd")
+        } else {
+            //We should not show the dialog.
+        }
     }
 
     private fun updateCells(cells: List<List<Cell>>) = cells?.let {

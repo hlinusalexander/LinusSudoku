@@ -11,6 +11,7 @@ class SudokuGame {
     var cellsLiveData = MutableLiveData<List<List<Cell>>>()
     val isTakingNotesLiveData = MutableLiveData<Boolean>()
     val highlightedKeysLiveData = MutableLiveData<Set<Int>>()
+    val showNewBoardDialogLiveData = MutableLiveData<Boolean>()
 
     private var selectedRow = -1
     private var selectedColumn = -1
@@ -29,6 +30,7 @@ class SudokuGame {
         selectedCellLiveData.postValue(Pair(selectedRow, selectedColumn))
         cellsLiveData.postValue(board.cells)
         isTakingNotesLiveData.postValue(isTakingNotes)
+        showNewBoardDialogLiveData.postValue(false)
     }
 
     fun handleInput(number: Int) {
@@ -99,8 +101,8 @@ class SudokuGame {
         println("Finished brute force solve...")
     }
 
-    fun newRandomBoard() {
-
+    fun newBoard() {
+        showNewBoardDialogLiveData.postValue(true)
     }
 
     private fun getValidStartingInstance(): List<List<Cell>> {
