@@ -1,8 +1,11 @@
 package com.example.linussudoku.android.view.game
 
 import androidx.lifecycle.MutableLiveData
+import com.example.linussudoku.android.view.game.algorithms.BoardSolver
 
 class SudokuGame {
+
+    private val boardSolver = BoardSolver()
 
     var selectedCellLiveData = MutableLiveData<Pair<Int, Int>>()
     var cellsLiveData = MutableLiveData<List<List<Cell>>>()
@@ -91,11 +94,12 @@ class SudokuGame {
     }
 
     fun solveBoard() {
-
+        println("Starting brute force solve...")
+        boardSolver.solveBoardBruteForce(this)
+        println("Finished brute force solve...")
     }
 
     fun newRandomBoard() {
-
 
     }
 
