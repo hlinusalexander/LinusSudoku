@@ -1,6 +1,7 @@
 package com.example.linussudoku.android.view
 
 import android.graphics.Color
+import android.graphics.PorterDuff
 import android.os.Bundle
 import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
@@ -55,8 +56,7 @@ class PlaySudokuActivity : AppCompatActivity(), SudokuBoardView.OnTouchListener 
 
         println("This is my current state: ${this.lifecycle.currentState}")
         viewModel = ViewModelProvider(this)[PlaySudokuViewModel::class.java]
-        viewModel.sudokuGame.selectedCellLiveData.observe(
-            this,
+        viewModel.sudokuGame.selectedCellLiveData.observe(this,
             Observer { updateSelectedCellUI(it) })
         viewModel.sudokuGame.cellsLiveData.observe(this, { updateCells(it) })
         viewModel.sudokuGame.isTakingNotesLiveData.observe(this, Observer {
@@ -65,6 +65,7 @@ class PlaySudokuActivity : AppCompatActivity(), SudokuBoardView.OnTouchListener 
         viewModel.sudokuGame.highlightedKeysLiveData.observe(this, Observer {
             updateHighLightedKeys(it)
         })
+
 
         numberButtons = listOf(
             binding.oneButton,
@@ -87,6 +88,10 @@ class PlaySudokuActivity : AppCompatActivity(), SudokuBoardView.OnTouchListener 
         binding.notesButton.setOnClickListener {
             viewModel.sudokuGame.changeNoteTakingState()
         }
+
+        binding.deleteButton.setOnClickListener {
+            viewModel.sudokuGame.delete()
+        }
     }
 
     private fun updateCells(cells: List<Cell>) = cells?.let {
@@ -104,10 +109,11 @@ class PlaySudokuActivity : AppCompatActivity(), SudokuBoardView.OnTouchListener 
         if (it) {
             drawable.setTint(primaryColor)
             notesButton.background = drawable
+            notesButton.setColorFilter(primaryColor, PorterDuff.Mode.MULTIPLY)
         } else {
             drawable.setTint(secondaryColor)
             notesButton.background = drawable
-
+            notesButton.setColorFilter(primaryColor, PorterDuff.Mode.MULTIPLY)
         }
     }
 

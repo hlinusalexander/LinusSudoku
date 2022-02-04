@@ -22,7 +22,7 @@ class SudokuGame {
         cells[0].notes = mutableSetOf(1, 2, 3, 4, 5, 6, 7, 8, 9)
         cells[11].isStartingCell = true
         cells[21].isStartingCell = true
-        
+
 
         board = Board(9, cells)
 
@@ -77,5 +77,17 @@ class SudokuGame {
 
         highlightedKeysLiveData.postValue(currentNotes)
     }
+
+    fun delete() {
+        val cell = board.getCell(selectedRow, selectedColumn)
+        if (isTakingNotes) {
+            cell.notes.clear()
+            highlightedKeysLiveData.postValue(setOf())
+        } else {
+            cell.value = 0
+        }
+        cellsLiveData.postValue(board.cells)
+    }
+
 
 }
