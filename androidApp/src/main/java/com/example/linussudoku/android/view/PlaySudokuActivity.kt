@@ -54,7 +54,8 @@ class PlaySudokuActivity : AppCompatActivity(), SudokuBoardView.OnTouchListener 
         setContentView(binding.root)
 
         viewModel = ViewModelProvider(this)[PlaySudokuViewModel::class.java]
-        viewModel.sudokuGame.selectedCellLiveData.observe(this,
+        viewModel.sudokuGame.selectedCellLiveData.observe(
+            this,
             Observer { updateSelectedCellUI(it) })
         viewModel.sudokuGame.cellsLiveData.observe(this, { updateCells(it) })
         viewModel.sudokuGame.isTakingNotesLiveData.observe(this, Observer {
@@ -111,7 +112,7 @@ class PlaySudokuActivity : AppCompatActivity(), SudokuBoardView.OnTouchListener 
         binding.deleteButton.background = deleteDrawable
     }
 
-    private fun updateCells(cells: List<Cell>) = cells?.let {
+    private fun updateCells(cells: List<List<Cell>>) = cells?.let {
         binding.sudokuBoardView.updateCells(cells)
     }
 

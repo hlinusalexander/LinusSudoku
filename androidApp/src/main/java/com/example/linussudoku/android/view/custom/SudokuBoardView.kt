@@ -24,7 +24,7 @@ class SudokuBoardView(context: Context, attributeSet: AttributeSet) : View(conte
 
     var listener: OnTouchListener? = null
 
-    private var cells: List<Cell>? = null
+    private var cells: List<List<Cell>>? = null
 
     private val thickLinePaint = Paint().apply {
         style = Paint.Style.STROKE
@@ -98,18 +98,22 @@ class SudokuBoardView(context: Context, attributeSet: AttributeSet) : View(conte
 
     private fun fillCells(canvas: Canvas) {
 
-        cells?.forEach {
-            val row = it.row
-            val column = it.column
+        cells?.forEach { rowCells ->
 
-            if (it.isStartingCell) {
-                fillCell(canvas, row, column, startingCellPaint)
-            } else if (row == selectedRow && column == selectedColumn) {
-                fillCell(canvas, row, column, selectedCellPaint)
-            } else if (row == selectedRow || column == selectedColumn) {
-                fillCell(canvas, row, column, conflictingCellPaint)
-            } else if (row / squareRootSize == selectedRow / squareRootSize && column / squareRootSize == selectedColumn / squareRootSize) {
-                fillCell(canvas, row, column, conflictingCellPaint)
+            rowCells.forEach { cell ->
+
+                val row = cell.row
+                val column = cell.column
+
+                if (cell.isStartingCell) {
+                    fillCell(canvas, row, column, startingCellPaint)
+                } else if (row == selectedRow && column == selectedColumn) {
+                    fillCell(canvas, row, column, selectedCellPaint)
+                } else if (row == selectedRow || column == selectedColumn) {
+                    fillCell(canvas, row, column, conflictingCellPaint)
+                } else if (row / squareRootSize == selectedRow / squareRootSize && column / squareRootSize == selectedColumn / squareRootSize) {
+                    fillCell(canvas, row, column, conflictingCellPaint)
+                }
             }
         }
 
@@ -146,43 +150,45 @@ class SudokuBoardView(context: Context, attributeSet: AttributeSet) : View(conte
     }
 
     private fun drawText(canvas: Canvas) {
-        cells?.forEach { cell ->
-            val cellValue = cell.value
-            val textBounds = Rect()
+        cells?.forEach { row ->
+            row.forEach { cell ->
+                val cellValue = cell.value
+                val textBounds = Rect()
 
-            if (cellValue == 0) {
-                cell.notes.forEach { note ->
-                    val rowAndCell = (note - 1) / squareRootSize
-                    val columnAndCell = (note - 1) % squareRootSize
-                    val valueString = note.toString()
-                    noteTextPaint.getTextBounds(valueString, 0, valueString.length, textBounds)
-                    val textWidth = noteTextPaint.measureText(valueString)
+                if (cellValue == 0) {
+                    cell.notes.forEach { note ->
+                        val rowAndCell = (note - 1) / squareRootSize
+                        val columnAndCell = (note - 1) % squareRootSize
+                        val valueString = note.toString()
+                        noteTextPaint.getTextBounds(valueString, 0, valueString.length, textBounds)
+                        val textWidth = noteTextPaint.measureText(valueString)
+                        val textHeight = textBounds.height()
+
+                        canvas.drawText(
+                            valueString,
+                            cell.column * cellSizePixels + columnAndCell * noteSizePixels + noteSizePixels / 2 - textWidth / 2f,
+                            cell.row * cellSizePixels + rowAndCell * noteSizePixels + noteSizePixels / 2 + textHeight / 2f,
+                            noteTextPaint
+                        )
+                    }
+                    //drawNotes
+                } else {
+                    val valueString = cell.value.toString()
+                    val row = cell.row
+                    val column = cell.column
+                    val paintToUse = if (cell.isStartingCell) startingCellTextPaint else textPaint
+
+                    paintToUse.getTextBounds(valueString, 0, valueString.length, textBounds)
+                    val textWidth = paintToUse.measureText(valueString)
                     val textHeight = textBounds.height()
 
                     canvas.drawText(
                         valueString,
-                        cell.column * cellSizePixels + columnAndCell * noteSizePixels + noteSizePixels / 2 - textWidth / 2f,
-                        cell.row * cellSizePixels + rowAndCell * noteSizePixels + noteSizePixels / 2 + textHeight / 2f,
-                        noteTextPaint
+                        (column * cellSizePixels) + cellSizePixels / 2 - textWidth / 2,
+                        (row * cellSizePixels) + cellSizePixels / 2 + textHeight / 2,
+                        paintToUse
                     )
                 }
-                //drawNotes
-            } else {
-                val valueString = cell.value.toString()
-                val row = cell.row
-                val column = cell.column
-                val paintToUse = if (cell.isStartingCell) startingCellTextPaint else textPaint
-
-                paintToUse.getTextBounds(valueString, 0, valueString.length, textBounds)
-                val textWidth = paintToUse.measureText(valueString)
-                val textHeight = textBounds.height()
-
-                canvas.drawText(
-                    valueString,
-                    (column * cellSizePixels) + cellSizePixels / 2 - textWidth / 2,
-                    (row * cellSizePixels) + cellSizePixels / 2 + textHeight / 2,
-                    paintToUse
-                )
             }
         }
     }
@@ -210,7 +216,7 @@ class SudokuBoardView(context: Context, attributeSet: AttributeSet) : View(conte
         invalidate()
     }
 
-    fun updateCells(cells: List<Cell>) {
+    fun updateCells(cells: List<List<Cell>>) {
         this.cells = cells
         invalidate()
     }

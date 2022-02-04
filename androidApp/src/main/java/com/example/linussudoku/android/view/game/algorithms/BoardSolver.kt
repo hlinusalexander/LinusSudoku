@@ -10,16 +10,7 @@ class BoardSolver {
         for (cellIndexToTest in 0..81) {
             val cellToTest = cells[cellIndexToTest]
 
-            if (cellToTest.value == 0) {
-                val row = cellIndexToTest / 9
-                val col = cellIndexToTest % 9
 
-                for (valueToTest in 1..9) {
-
-                }
-            } else {
-                //The value was not 0, so we do not go down and test different values of this cell.
-            }
         }
     }
 
