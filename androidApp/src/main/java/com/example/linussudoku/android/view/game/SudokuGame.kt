@@ -15,15 +15,12 @@ class SudokuGame {
 
     private val board: Board
 
+    private val boardSize = 9
+    private val squareRootSize = 3
 
     init {
-        val cells = List(9 * 9) { i -> Cell(i / 9, i % 9, i % 9) }
-
-        cells[0].notes = mutableSetOf(1, 2, 3, 4, 5, 6, 7, 8, 9)
-        cells[11].isStartingCell = true
-        cells[21].isStartingCell = true
-
-
+        val cells = getValidStartingInstance()
+        
         board = Board(9, cells)
 
         selectedCellLiveData.postValue(Pair(selectedRow, selectedColumn))
@@ -93,5 +90,105 @@ class SudokuGame {
         cellsLiveData.postValue(board.cells)
     }
 
+    fun newRandomBoard() {
+
+
+    }
+
+    private fun getValidStartingInstance(): List<Cell> {
+        val cells: MutableList<Cell> = mutableListOf()
+
+        cells.add(Cell(0, 0, 5, true))
+        cells.add(Cell(0, 1, 3, true))
+        cells.add(Cell(0, 2, 0, false))
+        cells.add(Cell(0, 3, 0, false))
+        cells.add(Cell(0, 4, 7, true))
+        cells.add(Cell(0, 5, 0, false))
+        cells.add(Cell(0, 6, 0, false))
+        cells.add(Cell(0, 7, 0, false))
+        cells.add(Cell(0, 8, 0, false))
+
+        cells.add(Cell(1, 0, 6, true))
+        cells.add(Cell(1, 1, 0, false))
+        cells.add(Cell(1, 2, 0, false))
+        cells.add(Cell(1, 3, 1, true))
+        cells.add(Cell(1, 4, 9, true))
+        cells.add(Cell(1, 5, 5, true))
+        cells.add(Cell(1, 6, 0, false))
+        cells.add(Cell(1, 7, 0, false))
+        cells.add(Cell(1, 8, 0, false))
+
+        cells.add(Cell(2, 0, 0, false))
+        cells.add(Cell(2, 1, 9, true))
+        cells.add(Cell(2, 2, 8, true))
+        cells.add(Cell(2, 3, 0, false))
+        cells.add(Cell(2, 4, 0, false))
+        cells.add(Cell(2, 5, 0, false))
+        cells.add(Cell(2, 6, 0, false))
+        cells.add(Cell(2, 7, 6, true))
+        cells.add(Cell(2, 8, 0, false))
+
+        cells.add(Cell(3, 0, 8, true))
+        cells.add(Cell(3, 1, 0, false))
+        cells.add(Cell(3, 2, 0, false))
+        cells.add(Cell(3, 3, 0, false))
+        cells.add(Cell(3, 4, 6, true))
+        cells.add(Cell(3, 5, 0, false))
+        cells.add(Cell(3, 6, 0, false))
+        cells.add(Cell(3, 7, 0, false))
+        cells.add(Cell(3, 8, 3, true))
+
+        cells.add(Cell(4, 0, 4, true))
+        cells.add(Cell(4, 1, 0, false))
+        cells.add(Cell(4, 2, 0, false))
+        cells.add(Cell(4, 3, 8, true))
+        cells.add(Cell(4, 4, 0, false))
+        cells.add(Cell(4, 5, 3, true))
+        cells.add(Cell(4, 6, 0, false))
+        cells.add(Cell(4, 7, 0, false))
+        cells.add(Cell(4, 8, 1, true))
+
+        cells.add(Cell(5, 0, 7, true))
+        cells.add(Cell(5, 1, 0, false))
+        cells.add(Cell(5, 2, 0, false))
+        cells.add(Cell(5, 3, 0, false))
+        cells.add(Cell(5, 4, 2, true))
+        cells.add(Cell(5, 5, 0, false))
+        cells.add(Cell(5, 6, 0, false))
+        cells.add(Cell(5, 7, 0, false))
+        cells.add(Cell(5, 8, 6, true))
+
+        cells.add(Cell(6, 0, 0, false))
+        cells.add(Cell(6, 1, 6, true))
+        cells.add(Cell(6, 2, 0, false))
+        cells.add(Cell(6, 3, 0, false))
+        cells.add(Cell(6, 4, 0, false))
+        cells.add(Cell(6, 5, 0, false))
+        cells.add(Cell(6, 6, 2, true))
+        cells.add(Cell(6, 7, 8, true))
+        cells.add(Cell(6, 8, 0, false))
+
+        cells.add(Cell(7, 0, 0, false))
+        cells.add(Cell(7, 1, 0, false))
+        cells.add(Cell(7, 2, 0, false))
+        cells.add(Cell(7, 3, 4, true))
+        cells.add(Cell(7, 4, 1, true))
+        cells.add(Cell(7, 5, 9, true))
+        cells.add(Cell(7, 6, 0, false))
+        cells.add(Cell(7, 7, 0, false))
+        cells.add(Cell(7, 8, 5, true))
+
+        cells.add(Cell(8, 0, 0, false))
+        cells.add(Cell(8, 1, 0, false))
+        cells.add(Cell(8, 2, 0, false))
+        cells.add(Cell(8, 3, 0, false))
+        cells.add(Cell(8, 4, 8, true))
+        cells.add(Cell(8, 5, 0, false))
+        cells.add(Cell(8, 6, 0, false))
+        cells.add(Cell(8, 7, 7, true))
+        cells.add(Cell(8, 8, 9, true))
+
+        return cells
+    }
 
 }

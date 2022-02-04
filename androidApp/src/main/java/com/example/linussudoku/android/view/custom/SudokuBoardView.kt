@@ -96,8 +96,7 @@ class SudokuBoardView(context: Context, attributeSet: AttributeSet) : View(conte
         startingCellTextPaint.textSize = cellSizePixels / 1.5F
     }
 
-    fun fillCells(canvas: Canvas) {
-
+    private fun fillCells(canvas: Canvas) {
 
         cells?.forEach {
             val row = it.row
@@ -128,11 +127,7 @@ class SudokuBoardView(context: Context, attributeSet: AttributeSet) : View(conte
 
     private fun drawLines(canvas: Canvas) {
         canvas.drawRect(
-            sideMargin,
-            1F,
-            width.toFloat() - sideMargin,
-            height.toFloat() - 1,
-            thickLinePaint
+            sideMargin, 1F, width.toFloat() - sideMargin, height.toFloat() - 1, thickLinePaint
         )
 
         for (i in 1 until size) {
@@ -141,19 +136,11 @@ class SudokuBoardView(context: Context, attributeSet: AttributeSet) : View(conte
                 else -> thinLinePaint
             }
             canvas.drawLine(
-                i * cellSizePixels,
-                0F,
-                i * cellSizePixels,
-                height.toFloat(),
-                paintToUse
+                i * cellSizePixels, 0F, i * cellSizePixels, height.toFloat(), paintToUse
             )
 
             canvas.drawLine(
-                0F + sideMargin,
-                i * cellSizePixels,
-                width.toFloat(),
-                i * cellSizePixels,
-                paintToUse
+                0F + sideMargin, i * cellSizePixels, width.toFloat(), i * cellSizePixels, paintToUse
             )
         }
     }

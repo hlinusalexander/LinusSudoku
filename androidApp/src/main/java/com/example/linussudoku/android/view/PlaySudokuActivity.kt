@@ -43,7 +43,6 @@ class PlaySudokuActivity : AppCompatActivity(), SudokuBoardView.OnTouchListener 
 
         binding = ActivityMainBinding.inflate(layoutInflater)
 
-
         binding.sudokuBoardView.registerListener(this)
 
         println("The current registered listener is: ${binding.sudokuBoardView.listener.toString()}")
@@ -54,9 +53,9 @@ class PlaySudokuActivity : AppCompatActivity(), SudokuBoardView.OnTouchListener 
         // Since we use this method we have to extend "AppCompatActivity()", which we do above.
         setContentView(binding.root)
 
-        println("This is my current state: ${this.lifecycle.currentState}")
         viewModel = ViewModelProvider(this)[PlaySudokuViewModel::class.java]
-        viewModel.sudokuGame.selectedCellLiveData.observe(this,
+        viewModel.sudokuGame.selectedCellLiveData.observe(
+            this,
             Observer { updateSelectedCellUI(it) })
         viewModel.sudokuGame.cellsLiveData.observe(this, { updateCells(it) })
         viewModel.sudokuGame.isTakingNotesLiveData.observe(this, Observer {
@@ -91,6 +90,10 @@ class PlaySudokuActivity : AppCompatActivity(), SudokuBoardView.OnTouchListener 
 
         binding.deleteButton.setOnClickListener {
             viewModel.sudokuGame.delete()
+        }
+
+        binding.newRandomBoardButton.setOnClickListener {
+            viewModel.sudokuGame.newRandomBoard()
         }
 
         /*

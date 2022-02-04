@@ -102,6 +102,14 @@
             android:layout_column="0"
             android:background="@drawable/edit_pen_black" />
 
+        <Button
+            android:id="@+id/newRandomBoardButton"
+            android:layout_width="87dp"
+            android:layout_height="42dp"
+            android:layout_row="3"
+            android:layout_column="1"
+            android:text="New" />
+
         <ImageButton
             android:id="@+id/deleteButton"
             android:layout_width="wrap_content"
