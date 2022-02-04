@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
+import androidx.core.graphics.drawable.DrawableCompat
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.example.linussudoku.Greeting
@@ -35,8 +36,7 @@ class PlaySudokuActivity : AppCompatActivity(), SudokuBoardView.OnTouchListener 
         setContentView(R.layout.activity_main)
 
         primaryColor = ContextCompat.getColor(
-            this,
-            R.color.colorPrimary
+            this, R.color.colorPrimary
         )
         secondaryColor = Color.LTGRAY
 
@@ -55,8 +55,7 @@ class PlaySudokuActivity : AppCompatActivity(), SudokuBoardView.OnTouchListener 
 
         println("This is my current state: ${this.lifecycle.currentState}")
         viewModel = ViewModelProvider(this)[PlaySudokuViewModel::class.java]
-        viewModel.sudokuGame.selectedCellLiveData.observe(
-            this,
+        viewModel.sudokuGame.selectedCellLiveData.observe(this,
             Observer { updateSelectedCellUI(it) })
         viewModel.sudokuGame.cellsLiveData.observe(this, { updateCells(it) })
         viewModel.sudokuGame.isTakingNotesLiveData.observe(this, Observer {
@@ -98,12 +97,16 @@ class PlaySudokuActivity : AppCompatActivity(), SudokuBoardView.OnTouchListener 
     }
 
     private fun updateNoteTakingUi(isNoteTaking: Boolean?) = isNoteTaking?.let {
+        val notesButton = binding.notesButton
+        val drawable = DrawableCompat.wrap(notesButton.background)
+
         if (it) {
-            binding.notesButton.setBackgroundColor(
-                primaryColor
-            )
+            drawable.setTint(primaryColor)
+            notesButton.background = drawable
         } else {
-            binding.notesButton.setBackgroundColor(secondaryColor)
+            drawable.setTint(secondaryColor)
+            notesButton.background = drawable
+
         }
     }
 

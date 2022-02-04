@@ -22,6 +22,7 @@ class SudokuGame {
         cells[0].notes = mutableSetOf(1, 2, 3, 4, 5, 6, 7, 8, 9)
         cells[11].isStartingCell = true
         cells[21].isStartingCell = true
+        
 
         board = Board(9, cells)
 
@@ -64,7 +65,8 @@ class SudokuGame {
     }
 
     fun changeNoteTakingState() {
-        isTakingNotes != isTakingNotes
+        isTakingNotes = !isTakingNotes
+
         isTakingNotesLiveData.postValue(isTakingNotes)
 
         val currentNotes = if (isTakingNotes) {
@@ -72,6 +74,7 @@ class SudokuGame {
         } else {
             setOf<Int>()
         }
+
         highlightedKeysLiveData.postValue(currentNotes)
     }
 
