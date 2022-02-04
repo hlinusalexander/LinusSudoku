@@ -55,7 +55,8 @@ class PlaySudokuActivity : AppCompatActivity(), SudokuBoardView.OnTouchListener 
 
         println("This is my current state: ${this.lifecycle.currentState}")
         viewModel = ViewModelProvider(this)[PlaySudokuViewModel::class.java]
-        viewModel.sudokuGame.selectedCellLiveData.observe(this,
+        viewModel.sudokuGame.selectedCellLiveData.observe(
+            this,
             Observer { updateSelectedCellUI(it) })
         viewModel.sudokuGame.cellsLiveData.observe(this, { updateCells(it) })
         viewModel.sudokuGame.isTakingNotesLiveData.observe(this, Observer {
@@ -112,8 +113,11 @@ class PlaySudokuActivity : AppCompatActivity(), SudokuBoardView.OnTouchListener 
 
     private fun updateHighLightedKeys(set: Set<Int>?) = set?.let {
         numberButtons.forEachIndexed { index, button ->
+            val drawable = DrawableCompat.wrap(button.background)
+
             val color = if (set.contains(index + 1)) primaryColor else secondaryColor
-            button.setBackgroundColor(color)
+            drawable.setTint(color)
+            button.background = drawable
         }
     }
 
