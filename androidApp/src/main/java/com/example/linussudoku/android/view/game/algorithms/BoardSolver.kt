@@ -27,7 +27,6 @@ class BoardSolver {
                             if (!currentColumnValues.contains(valueToTest)) {
                                 if (!currentMiniSquareValues.contains(valueToTest)) {
                                     //We will actually test adding the value.
-                                    println("Will test at: row: $rowToTest, column: $columnToTest, value: $valueToTest")
                                     cellToTest.value = valueToTest
                                     sudokuGame.cellsLiveData.postValue(cells)
 
@@ -58,10 +57,6 @@ class BoardSolver {
                     }
                     //At this point we've gone through all possible values and none will fit.
                     //If this is the case we break and try a different route in our depth-first-search
-                    println("Unsolvable path identified.")
-                    println("rowToTest:$rowToTest, columnToTest:$columnToTest")
-//                    rowWeTested = rowToTest
-//                    columnWeTested = columnToTest
                     break@rowLoop
                 } else {
                     //The cell already has a value, so we do not test anything here.
@@ -69,7 +64,6 @@ class BoardSolver {
             }
         }
         if (rowWeTested != -1 && columnWeTested != -1) {
-            println("Deleting this cell. row: $rowWeTested, column: $columnWeTested")
             cells[rowWeTested][columnWeTested].value = 0
         }
         return false
